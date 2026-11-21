@@ -120,11 +120,22 @@
 
 **Trade-offs:** Less unconstrained autonomy but safer, explainable, testable behavior.
 
+## ADR-011 — Bootstrap toolchain and package verification
+
+**Status:** Accepted for FEATURE-001
+
+**Context.** The first build establishes the Java package boundaries and provides a reproducible way to verify them in a single Maven module.
+
+**Decision.** Use Temurin Java 25, the official script-only Maven Wrapper for Maven 3.10.1 with the distribution SHA-256 pinned, and Spring Boot 4.1.3. Maven Enforcer requires a Java 25 runtime, and the compiler targets release 25. Reserve separate Temporal Workflow implementation, Workflow contract, Activity contract and client packages. ArchUnit verifies direct dependencies during Maven tests. CI runs the same Maven Wrapper build with Temurin 25.
+
+**Java style.** Use the repository's Java conventions with four-space indentation and descriptive names. The build adds no automatic formatter.
+
+**Trade-offs.** Package checks catch illegal compile-time dependencies early. Workflow behavior still needs deterministic implementation and replay tests as orchestration is added. See the [compatibility record](../compatibility.md) for the resolved dependencies and bootstrap verification.
+
 ## Open decision log
 
-- Determine exact supported **LangChain4j release and Agentic beta alignment** during dependency resolution; avoid copying unverified pre-release sample API blindly.
 - Verify DeepSeek Tool Calling, non-thinking parameter transport, JSON output and error behavior with the chosen LangChain4j adapter before implementing orchestrator.
-- Confirm Temporal Java SDK and optional Spring integration compatibility with Spring Boot 4.1.x; using the plain SDK is acceptable.
+- Verify Temporal payload conversion and worker behavior when FEATURE-003 introduces the plain SDK wiring.
 - Decide whether source snippets should be stored in report or replaced with digests if sensitive projects are ever supported.
 - Define how to persist billing estimates when a request succeeded remotely but an Activity retry makes client-side accounting uncertain.
 
