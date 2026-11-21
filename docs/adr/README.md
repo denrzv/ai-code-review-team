@@ -16,11 +16,13 @@
 **Revisit when:** agent roles require separate trust domains, team ownership or scaling.
 
 ## ADR-002 — DeepSeek Flash via model-provider abstraction
-**Status:** Provisional, integration smoke test mandatory
+**Status:** Accepted for PoC after live provider verification
 
 **Context:** Want inexpensive multi-agent experiment and reproducible token/cost accounting.
 
 **Decision:** Default model `deepseek-flash` through LangChain4j OpenAI-compatible integration. Disable thinking mode initially using validated provider options. Configure base URL/key/model externally. Parse typed results and validate independently.
+
+**Protocol smoke.** FEATURE-002 uses the resolved LangChain4j adapter with an explicit one-shot transport. The loopback suite verifies thinking disabled, request output bounds, Planner JSON object mode and a complete two-tool sequence. It also checks that permanent failures bypass retry and that retryable failures produce one attempted POST. The opt-in smoke passed against DeepSeek Flash on 2026-11-21 using the fixed synthetic fixture. See the [compatibility record](../compatibility.md#feature-002-deepseek-protocol) for exact fields, classifications, verification commands and evidence limits.
 
 **Alternatives:** GPT family, local Ollama/MLX, DeepSeek V4 Pro, direct DeepSeek HTTP client.
 
@@ -134,7 +136,6 @@
 
 ## Open decision log
 
-- Verify DeepSeek Tool Calling, non-thinking parameter transport, JSON output and error behavior with the chosen LangChain4j adapter before implementing orchestrator.
 - Verify Temporal payload conversion and worker behavior when FEATURE-003 introduces the plain SDK wiring.
 - Decide whether source snippets should be stored in report or replaced with digests if sensitive projects are ever supported.
 - Define how to persist billing estimates when a request succeeded remotely but an Activity retry makes client-side accounting uncertain.
