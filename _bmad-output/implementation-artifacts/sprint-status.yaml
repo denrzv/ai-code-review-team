@@ -29,14 +29,14 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-21-2026 17:45
-last_updated: 11-21-2026 18:10
+last_updated: 11-21-2026 18:22
 project: ai-code-review-team
 project_key: NOKEY
 tracking_system: file-system
 story_location: _bmad-output/implementation-artifacts
 development_status:
   epic-1: in-progress
-  1-1-verify-the-local-java-25-build: review
+  1-1-verify-the-local-java-25-build: done
   1-2-verify-the-deepseek-review-protocol: backlog
   1-3-run-a-workflow-on-local-persistent-temporal: backlog
   1-4-inspect-a-reproducible-pinned-git-change: backlog
