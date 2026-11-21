@@ -2,7 +2,7 @@
 
 A reproducible multi-agent code-review proof of concept with **Java 25**, **Spring Boot 4.1.x**, **LangChain4j**, **DeepSeek Flash**, and **Temporal**.
 
-> Status: **architecture and implementation plan only**. No runtime implementation has been committed yet. All review targets must be synthetic or explicitly authorized for transmission to the configured LLM provider.
+> Status: **local service bootstrap**. Review execution is planned. All review targets must be synthetic or explicitly authorized for transmission to the configured LLM provider.
 
 ## Mission
 
@@ -25,7 +25,8 @@ Review a fixed Git diff using specialized **Correctness**, **Security**, and **P
 | Area | Baseline |
 | --- | --- |
 | Java | 25 LTS |
-| Spring Boot | 4.1.x (validate exact release via Maven) |
+| Build | Temurin 25 and Maven 3.10.1 via Maven Wrapper |
+| Spring Boot | 4.1.3 |
 | Orchestration | Temporal Java SDK; a Workflow per review run |
 | AI | LangChain4j; one LLM Planner + specialized agents |
 | Model | DeepSeek `deepseek-flash`, non-thinking first |
@@ -54,9 +55,35 @@ The planner may delegate repeatedly, but **does not execute inside Temporal Work
 
 Temporal checkpoints **completed Activities**, **not every internal LLM or tool call**. If an agent Activity crashes mid-execution it may run again and incur another bill. No exactly-once claim for external LLM requests. Per-call durability is a possible v2 design.
 
-## First implementation step
+## Build and run locally
 
-Start with GitHub issue **FEATURE-001 : Project Bootstrap**, then continue in dependency order using [the roadmap](docs/implementation-plan.md).
+Install Temurin JDK 25 and point `JAVA_HOME` to it. Run the following commands from the repository root. The wrapper downloads and verifies Maven 3.10.1 on its first run. On Unix, install `unzip` so the wrapper can verify the ZIP checksum.
+
+```sh
+./mvnw -v
+./mvnw -B clean verify
+"$JAVA_HOME/bin/java" -jar target/ai-code-review-team-0.1.0-SNAPSHOT.jar
+```
+
+On Windows, run these commands in Command Prompt.
+
+```cmd
+mvnw.cmd -v
+mvnw.cmd -B clean verify
+"%JAVA_HOME%\bin\java.exe" -jar target\ai-code-review-team-0.1.0-SNAPSHOT.jar
+```
+
+With the application running, check health from another terminal.
+
+```sh
+curl --fail --silent --show-error http://127.0.0.1:8080/actuator/health
+```
+
+Expect HTTP 200 with a JSON `status` of `UP`. If port 8080 is in use, pass `--server.port=8081` when starting the JAR and use port 8081 in the health URL. The bootstrap starts with no DeepSeek key or Temporal server. `POST /api/reviews` returns HTTP 404 until review operations are implemented.
+
+The defaults live in [application.yaml](src/main/resources/application.yaml). Override non-secret values with Spring configuration, for example `REVIEW_OUTPUTDIR=custom/reviews` or `--review.output-dir=custom/reviews`. The provider credential source for later integration is `${DEEPSEEK_API_KEY}`.
+
+See the [compatibility record](docs/compatibility.md) for the resolved stack and [roadmap](docs/implementation-plan.md) for subsequent features.
 
 ## Official references
 

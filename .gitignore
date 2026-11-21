@@ -1,0 +1,15 @@
+# IDE
+.idea/
+*.iml
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# BMad generated skill renders (regenerated on each invocation)
+_bmad/render/
+
+# Local configuration and generated output
+.env
+.env.*
+/target/
+/output/

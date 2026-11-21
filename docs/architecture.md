@@ -46,6 +46,26 @@ flowchart LR
 - **Evidence Validator**: Java-only, checks path, HEAD SHA, line ranges and cited snippet; semantic correctness is not guaranteed. Dedupe only when justified by normalized issue + location; preserve provenance.
 - **Report Assembly**: deterministic JSON + Markdown outputs; writes artifacts under `output/reviews/<reviewId>/`, returns small `ReportReference`.
 
+## Bootstrap package layout
+
+The Spring Boot entry point is `dev.denrzv.codereview.CodeReviewApplication`. The package names below are relative to `dev.denrzv.codereview`.
+
+| Role | Package |
+| --- | --- |
+| Review API | `adapter.api` |
+| State and pure policies | `domain` |
+| Services and ports | `application` |
+| Planner and specialist model adapters | `adapter.llm` |
+| Git and artifact infrastructure | `adapter.git`, `adapter.artifacts` |
+| Temporal worker and Activity implementations | `orchestration` |
+| Temporal Activity and Workflow contracts | `orchestration.activity`, `orchestration.contract` |
+| Temporal Workflow implementations and client operations | `orchestration.workflow`, `orchestration.client` |
+| Spring settings and evaluation tools | `config`, `evaluation` |
+
+ArchUnit checks the dependency directions in AD-1. Domain code uses the JDK and other domain types. Application code uses the domain and the JDK. Workflow implementations can use domain types, orchestration contracts, replay-safe JDK types and the Temporal Workflow API. The API uses application services and client-side orchestration. The LLM, Git and artifact adapters implement application ports.
+
+Bootstrap registers an empty review controller and exposes Actuator health on the loopback interface. Future provider and Temporal integration use the plain SDKs under the package boundaries above.
+
 ## Durable execution flow
 
 ```mermaid

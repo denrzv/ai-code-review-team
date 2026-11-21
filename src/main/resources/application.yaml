@@ -1,0 +1,54 @@
+server:
+  address: 127.0.0.1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+review:
+  model:
+    base-url: https://api.deepseek.com
+    name: deepseek-flash
+    thinking-enabled: false
+  budget:
+    max-elapsed: 15m
+    max-delegations: 6
+    max-invocations-per-topic: 2
+    tool-calls:
+      per-run: 30
+      per-specialist: 12
+    run:
+      input-tokens: 190000
+      output-tokens: 38000
+      cost-microdollars: 500000
+    roles:
+      planner:
+        input-tokens: 10000
+        output-tokens: 2000
+        cost-microdollars: 20000
+      specialist:
+        input-tokens: 20000
+        output-tokens: 4000
+        cost-microdollars: 60000
+      single:
+        input-tokens: 190000
+        output-tokens: 38000
+        cost-microdollars: 500000
+  limits:
+    max-changed-files: 20
+    max-changed-lines: 1500
+    max-read-lines: 200
+    max-diff-lines-per-file: 400
+    max-search-hits: 20
+    max-tool-result-code-points: 16000
+  allowlist: []
+  # DeepSeek Flash peak rates in USD per million tokens.
+  prices:
+    deepseek-flash:
+      as-of: "2026-11-21"
+      cache-hit-usd-per-million: 0.006
+      cache-miss-usd-per-million: 0.30
+      output-usd-per-million: 1.20
+  output-dir: output/reviews

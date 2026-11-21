@@ -1,0 +1,60 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 11-21-2026 17:45
+last_updated: 11-21-2026 18:22
+project: ai-code-review-team
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: in-progress
+  1-1-verify-the-local-java-25-build: done
+  1-2-verify-the-deepseek-review-protocol: backlog
+  1-3-run-a-workflow-on-local-persistent-temporal: backlog
+  1-4-inspect-a-reproducible-pinned-git-change: backlog
+  1-5-verify-candidate-evidence-against-pinned-head: backlog
+  1-6-run-an-all-category-single-agent-review: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-validate-planner-proposals-and-enforce-run-budgets: backlog
+  2-2-review-security-with-a-scoped-specialist: backlog
+  2-3-review-performance-with-a-scoped-specialist: backlog
+  2-4-execute-planned-specialist-work-and-account-for-coverage: backlog
+  2-5-publish-deterministic-review-artifacts: backlog
+  2-6-submit-poll-and-cancel-reviews-through-rest: backlog
+  2-7-demonstrate-durable-recovery-on-persistent-temporal: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-generate-a-seeded-fixture-with-isolated-ground-truth: backlog
+  3-2-run-comparable-trials-and-publish-the-result: backlog
+  epic-3-retrospective: optional
