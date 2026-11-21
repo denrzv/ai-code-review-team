@@ -60,7 +60,8 @@ context: ['{project-root}/CLAUDE.md']
 
 ## Implementation Notes
 
-- The wire suite verifies the planner fields, ordered tool results and pre-dispatch guards, planner repair and refusal, typed provider/transport errors with request counts, usage absent or partial, and the live opt-in and credential gate through loopback. Final Java 25 clean verification passed 76 tests, including 49 loopback protocol cases. The opt-in live test was skipped, so live provider behavior remains unverified. Review fixes were verified locally and no findings were deferred.
+- The wire suite verifies the planner fields, ordered tool results and pre-dispatch guards, planner repair and refusal, typed provider/transport errors with request counts, usage absent or partial, and the live opt-in and credential gate through loopback. Final keyless Java 25 clean verification passed 76 tests, including 49 loopback protocol cases. Review fixes were verified locally and no findings were deferred.
+- The opt-in live test passed on 2026-11-21 with the official DeepSeek endpoint and model `deepseek-flash`. It completed in 4.846 seconds with four requests and two tool calls. The [compatibility record](../../docs/compatibility.md#feature-002-deepseek-protocol) records observed usage and estimated cost.
 
 ## Spec Change Log
 

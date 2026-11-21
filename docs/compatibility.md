@@ -63,6 +63,8 @@ The adapter sends no provider built-in tools. LangChain4j retries, transport ret
 ./mvnw -B -Dtest=DeepSeekLiveSmokeTest -Ddeepseek.live=true test
 ```
 
-The loopback suite checks wire fields, tool history, validation, limits, the live opt-in gate and request counts for status failures and early disconnects. The live smoke is skipped unless explicitly enabled. Once enabled, it fails before sending a request if `DEEPSEEK_API_KEY` is missing or blank. When credentials are present it can make bounded, billable requests. Live provider behavior remains unverified for this change. A successful live smoke would demonstrate the tested fixture and model at the time of the run.
+The loopback suite checks wire fields, tool history, validation, limits, the live opt-in gate and request counts for status failures and early disconnects. The live smoke is skipped unless explicitly enabled. Once enabled, it fails before sending a request if `DEEPSEEK_API_KEY` is missing or blank. When credentials are present it can make bounded, billable requests.
+
+On 2026-11-21, the live smoke passed on Temurin 25.0.5.1 against `https://api.deepseek.com` using `deepseek-flash`. DeepSeek accepted the thinking-disabled requests, returned a valid Planner `COMPLETE` decision, and completed the reviewer turn with two sequential tool calls. The smoke completed in 4.846 seconds across four requests, without a repair. DeepSeek reported 1,239 input tokens (384 cache hits and 855 cache misses) and 139 output tokens. The configured rates estimated USD 0.000425604. Reasoning token counts were absent. The live run exercised the successful path, and the loopback suite covers provider errors and malformed replies.
 
 See the [DeepSeek Chat Completions API reference](https://api-docs.deepseek.com/api/create-chat-completion/) for the provider's documented fields.
