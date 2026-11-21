@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How a review runs | AI Code Review Team</title>
+<style>
+:root { color-scheme: light; font: 1.06rem/1.65 system-ui, sans-serif; color: #152623; background: #f5f6ef; }
+* { box-sizing: border-box; }
+main { max-width: 58rem; margin: auto; padding: clamp(1.25rem, 5vw, 4rem); }
+h1, h2 { font-family: Georgia, serif; line-height: 1.12; }
+h1 { font-size: clamp(2.7rem, 7vw, 4.6rem); margin: .35em 0; }
+h2 { font-size: 1.75rem; margin-top: 1.65em; }
+p { max-width: 67ch; }
+.eyebrow { color: #325e53; font-weight: 700; letter-spacing: .04em; }
+ol { list-style: none; padding: 0; display: grid; gap: .65rem; }
+li { background: #fff; padding: .9rem 1.15rem; border-left: .23rem solid #427b69; }
+li strong { display: block; }
+a { color: #1d5748; text-underline-offset: .22em; }
+aside { border-top: 1px solid #a3b6a9; margin-top: 2.5rem; padding-top: .5rem; }
+</style>
+</head>
+<body>
+<main>
+<header>
+<p class="eyebrow">AI Code Review Team</p>
+<h1>How a review runs</h1>
+<p>A local experiment to see whether a Planner and focused reviewers find more defects than one reviewer given the same overall budget.</p>
+</header>
+<section>
+<h2>From two commits to a report</h2>
+<ol>
+<li><strong>The API pins the inputs.</strong> It checks an allowlisted synthetic repository and two commit IDs, freezes the budget, and returns a review ID to poll.</li>
+<li><strong>Temporal chooses what happens next.</strong> In multi-agent mode a Planner proposes a task. Java checks the role, topic and budget before dispatch. In single-agent mode Temporal dispatches one reviewer.</li>
+<li><strong>Reviewers inspect the pinned commits.</strong> Correctness, Security and Performance reviewers propose findings using bounded, read-only tools. Tool results show which changed lines the model actually received.</li>
+<li><strong>The reporting Activity verifies citations.</strong> It checks candidate quotes against the policy-filtered HEAD, merges duplicates and publishes JSON, Markdown and a manifest. You can inspect rejected candidates and uncovered changes.</li>
+</ol>
+</section>
+<section>
+<h2>What happens if the worker stops?</h2>
+<p>Restart the worker with the same Temporal storage. Temporal reuses completed steps and can retry an interrupted Activity. The report shows observable retries and identifies usage that could not be recovered. A provider can bill a request it accepted before the worker lost the response.</p>
+</section>
+<section>
+<h2>How to read the comparison</h2>
+<p>A source-verified citation means the quote matched the pinned source. To judge whether a finding describes a defect, compare its root cause, location and failure scenario with the separate goldset. Pair runs on the same fixture and settings. Compare recall, precision, coverage, cost and latency, and keep partial or failed trials in the results.</p>
+</section>
+<aside>
+<p>See the <a href="ARCHITECTURE-SPINE.md">architecture spine</a> for the build rules and decision IDs.</p>
+</aside>
+</main>
+</body>
+</html>

@@ -70,8 +70,8 @@ Operator can submit a review for an allowlisted repository, a base SHA, a head S
 
 #### FR-2: Idempotent review identity
 Operator can supply a `reviewId`, or let the system generate one.
-- Resubmitting the same `reviewId` with the same payload returns the existing run. It does not start a second one.
-- Resubmitting the same `reviewId` with a *different* payload is rejected as a conflict. *(Decision: the docs leave conflict semantics undefined; this PRD defines them.)*
+- While review history or a verified publication manifest identifies the existing run, resubmitting the same `reviewId` with the same payload returns that run. A different payload is rejected as a conflict.
+- An unpublished `reviewId` can be reused after its review history expires. A new run can start only after the system confirms the absence of both history and a publication record.
 
 #### FR-3: Status and progress
 Operator can query a run's state, its progress (delegations done, budget used) and links to its reports.
@@ -116,7 +116,7 @@ Each delegated specialist investigates its task with the read-only tools and ret
 
 #### FR-11: Budgets and stopping
 The system enforces per-run limits on delegations, invocations per topic, tool calls per invocation, input and output tokens, **estimated cost**, and elapsed time.
-- Exhausting any limit ends the run `PARTIAL`, with that limit named as the reason.
+- A run that stops because it exhausted a budget ends `PARTIAL` if it observed at least one changed unit, including a descriptor-only change, and `FAILED` if it observed none. Both outcomes name the exhausted limit.
 - Limits are enforced in code, never only in prompts. *(Decision: a cost limit is required by project rules but is missing from the documented budget fields. It is added here.)*
 
 #### FR-12: Bounded shared context
@@ -251,9 +251,9 @@ The project succeeds when the operator can show, with reproducible evidence, wha
 
 ## 10. Confirmed Decisions (formerly assumptions)
 
-- §4.1 FR-2: the same `reviewId` with a different payload is rejected as a conflict.
+- §4.1 FR-2 bounds review identity to retained history or a verified publication manifest.
 - §4.2 FR-8: goldset isolation is enforced by a mechanism the architecture chooses.
-- §4.3 FR-11: an estimated-cost limit is part of the budget.
+- §4.3 FR-11 includes estimated cost in the budget and uses observed coverage to determine the outcome when a budget stops the run.
 - §4.4 FR-13: single-agent mode is a first-class mode that needs an owning feature.
 - §4.5 FR-15: the report gains a section for rejected candidates.
 - §5 NFR-5: the default cost ceiling is ≤ USD 0.50 per run on the fixture.
