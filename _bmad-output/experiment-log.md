@@ -22,4 +22,4 @@ Purpose: record exactly what input the `experiment/bmad-method` line received, s
 
 | Date | Skill | Input | Output | Notes (time / cost / human interventions) |
 |---|---|---|---|---|
-| | | | | |
+| 2026-11-21 | bmad-prd (Create, fast path) | README.md + docs/ as-is | `planning-artifacts/prds/prd-ai-code-review-team-2026-11-21/` (prd.md final, addendum.md, reviews) | Human: 3 replies (stakes/fast path, ok on 6 assumptions, ok on review fixes); 6 subagents |
